@@ -1,4 +1,4 @@
-package br.com.ilegra.service;
+package br.com.ilegra.service.report;
 
 public class ReportServiceFactory {
 

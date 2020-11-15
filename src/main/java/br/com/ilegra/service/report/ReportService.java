@@ -1,4 +1,4 @@
-package br.com.ilegra.service;
+package br.com.ilegra.service.report;
 
 import br.com.ilegra.domain.SalesData;
 
