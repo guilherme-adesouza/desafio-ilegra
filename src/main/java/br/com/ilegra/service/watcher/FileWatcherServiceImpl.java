@@ -1,6 +1,8 @@
 package br.com.ilegra.service.watcher;
 
+import br.com.ilegra.domain.SalesData;
 import br.com.ilegra.service.reader.FileReaderFactory;
+import br.com.ilegra.service.writer.FileWriterService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +21,13 @@ public class FileWatcherServiceImpl implements FileWatcherService {
     private static final Logger logger = LogManager.getLogger(FileWatcherServiceImpl.class);
 
     private final String watchDir;
+    private final FileWriterService fileWriterService;
 
     @Autowired
-    public FileWatcherServiceImpl(@Value("${app.watch.dir}") String watchDir) {
+    public FileWatcherServiceImpl(@Value("${app.watch.dir}") String watchDir,
+                                  FileWriterService fileWriterService) {
         this.watchDir = watchDir;
+        this.fileWriterService = fileWriterService;
     }
 
     @Override
@@ -65,7 +70,8 @@ public class FileWatcherServiceImpl implements FileWatcherService {
                 Path filename = ev.context();
                 Path filePath = resolveFile(dir, filename);
                 if (filePath == null) continue;
-                FileReaderFactory.create().processFile(filePath);
+                final SalesData salesData = FileReaderFactory.create().processFile(filePath);
+                fileWriterService.generateFile(salesData, filename.getFileName());
             }
             boolean valid = key.reset();
             logger.debug("Valid key: [{}]", valid);

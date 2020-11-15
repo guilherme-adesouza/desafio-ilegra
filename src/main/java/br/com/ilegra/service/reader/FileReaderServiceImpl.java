@@ -20,7 +20,7 @@ public class FileReaderServiceImpl implements FileReaderService {
     private static final String splitBy = "ç";
 
     @Override
-    public void processFile(Path absolutePath) {
+    public SalesData processFile(Path absolutePath) {
         logger.info("Processing file [{}] ...", absolutePath.getFileName());
         SalesData salesData = new SalesData();
         try {
@@ -51,6 +51,8 @@ public class FileReaderServiceImpl implements FileReaderService {
             br.close();
         } catch (IOException e)  {
             logger.error("Error while processing file [{}]:", absolutePath.getFileName(), e);
+            return null;
         }
+        return salesData;
     }
 }
