@@ -1,5 +1,6 @@
 package br.com.ilegra.service.watcher;
 
+import br.com.ilegra.service.reader.FileReaderFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,9 +63,9 @@ public class FileWatcherServiceImpl implements FileWatcherService {
 
                 WatchEvent<Path> ev = (WatchEvent<Path>) event;
                 Path filename = ev.context();
-                if (!resolveFile(dir, filename)) continue;
-
-                logger.debug("Filename: [{}]", filename);
+                Path filePath = resolveFile(dir, filename);
+                if (filePath == null) continue;
+                FileReaderFactory.create().processFile(filePath);
             }
             boolean valid = key.reset();
             logger.debug("Valid key: [{}]", valid);
@@ -85,17 +86,18 @@ public class FileWatcherServiceImpl implements FileWatcherService {
         }
     }
 
-    private boolean resolveFile(Path dir, Path filename) {
+    private Path resolveFile(Path dir, Path filename) {
+        Path child = null;
         try {
-            Path child = dir.resolve(filename);
+            child = dir.resolve(filename);
             if (!Files.probeContentType(child).equals("text/plain")) {
                 logger.error("New file [{}] is not a plain text fil", filename);
-                return false;
+                return null;
             }
         } catch (IOException ex) {
             logger.error("Error resolving file [{}]: ", filename, ex);
-            return false;
+            return null;
         }
-        return true;
+        return child;
     }
 }
