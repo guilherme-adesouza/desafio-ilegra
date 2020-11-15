@@ -2,10 +2,10 @@ package br.com.ilegra.domain.sale;
 
 public class ItemSale {
     private final String id;
-    private final Integer quantity;
+    private final int quantity;
     private final double price;
 
-    public ItemSale(String id, Integer quantity, double price) {
+    public ItemSale(String id, int quantity, double price) {
         this.id = id;
         this.quantity = quantity;
         this.price = price;
@@ -15,7 +15,7 @@ public class ItemSale {
         return id;
     }
 
-    public Integer getQuantity() {
+    public int getQuantity() {
         return quantity;
     }
 
