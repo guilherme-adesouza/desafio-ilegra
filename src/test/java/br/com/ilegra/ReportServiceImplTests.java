@@ -5,7 +5,8 @@ import br.com.ilegra.domain.customer.Customer;
 import br.com.ilegra.domain.sale.ItemSale;
 import br.com.ilegra.domain.sale.Sale;
 import br.com.ilegra.domain.seller.Seller;
-import br.com.ilegra.service.ReportServiceImpl;
+import br.com.ilegra.service.ReportService;
+import br.com.ilegra.service.ReportServiceFactory;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 class ReportServiceImplTests {
 
-	static ReportServiceImpl service;
+	static final ReportService service = ReportServiceFactory.create();
 
 	@BeforeAll
 	static void loadSalesData() {
@@ -41,7 +42,7 @@ class ReportServiceImplTests {
 		itemList2.add(new ItemSale("3", 40, 0.10));
 		salesData.addSale(new Sale("08", itemList1, "Paulo"));
 
-		ReportServiceImplTests.service = new ReportServiceImpl(salesData);
+		service.setSalesData(salesData);
 	}
 
 	@Test

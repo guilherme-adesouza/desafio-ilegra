@@ -10,9 +10,17 @@ import static java.util.stream.Collectors.groupingBy;
 
 public class ReportServiceImpl implements ReportService {
 
-    private final SalesData salesData;
+    private SalesData salesData;
+
+    public ReportServiceImpl() {
+    }
 
     public ReportServiceImpl(SalesData salesData) {
+        this.salesData = salesData;
+    }
+
+    @Override
+    public void setSalesData(SalesData salesData) {
         this.salesData = salesData;
     }
 
